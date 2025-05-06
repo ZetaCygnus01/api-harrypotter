@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 import { FaHatWizard, FaBook, FaHome, FaFilm, FaStar, FaInfo } from "react-icons/fa";
 
 const tabs = [
-    { path: '/', icon: <FaHatWizzard/>, label: 'Personajes'},
+    { path: '/', icon: <FaHatWizard/>, label: 'Personajes'},
     { path: '/houses', icon: <FaHome/>, label: 'Casas'},
     { path: '/movies', icon: <FaFilm/>, label: 'Peliculas'},
     { path: '/books', icon: <FaBook/>, label: 'Libros'},
