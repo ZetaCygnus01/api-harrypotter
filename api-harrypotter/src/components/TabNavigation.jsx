@@ -10,7 +10,7 @@ const tabs = [
     { path: '/info', icon: <FaInfo/>, label: 'Info'},
 ];
 
-const TabNabigation 0 () => {
+const TabNabigation = () => {
     return (
         <nav className="fixed bottom-0 left-0 right-0 bg-purple-900 text-white flex justify-around py-3 shadow-md z-50">
           {tabs.map(tab => (

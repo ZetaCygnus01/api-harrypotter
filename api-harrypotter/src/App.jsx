@@ -1,14 +1,27 @@
-import React from 'react';
-import CharacterList from './components/CharacterList';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Characters from "./pages/Characters";
+import Houses from "./pages/Houses";
+import Movies from "./pages/Movies";
+import Books from "./pages/Books";
+import Favorites from "./pages/Favorites";
+import Info from "./pages/Info";
+import TabNavigation from "./components/TabNavigation";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <header className="text-center p-6 bg-purple-900 text-white text-3xl font-bold">
-        Personajes de Harry Potter 🧙‍♀️
-      </header>
-      <CharacterList />
-    </div>
+    <Router>
+      <div className="pb-16"> {/* esto es un espacio vacio */}
+        <Routes>
+          <Route path="/" element={<Characters />} />
+          <Route path="/houses" element={<Houses />} />
+          <Route path="/movies" element={<Movies />} />
+          <Route path="/books" element={<Books />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/info" element={<Info />} />
+        </Routes>
+      </div>
+      <TabNavigation />
+    </Router>
   );
 }
 
