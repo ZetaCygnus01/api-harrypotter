@@ -9,7 +9,7 @@ import TabNavigation from "./components/TabNavigation";
 
 function App() {
   return (
-    <Router>
+    <Router basename="/api-harrypotter">
       <div className="pb-16"> {/* esto es un espacio vacio */}
         <Routes>
           <Route path="/" element={<Characters />} />

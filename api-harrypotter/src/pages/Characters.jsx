@@ -1,102 +1,106 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
-function Characters() {
-    const [characters, setCharacters] = useState([]);
-    const [search, SetSearch] = useState('');
-    const [filtered, SetFiltered] = useState([]);
-    const [houseFilter, SetHouseFilter] = useState(''); // Nuevo Filtro de Casa
+const Characters = () => {
+  const [characters, setCharacters] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [houseFilter, setHouseFilter] = useState("");
+  const [favorites, setFavorites] = useState(() => {
+    const stored = localStorage.getItem("favorites");
+    return stored ? JSON.parse(stored) : [];
+  });
 
-    // Llamado a la API
-    useEffect(() => {
-        axios.get('https://hp-api.onrender.com/api/characters')
-            .then(res => {
-                setCharacters(res.data);
-                SetFiltered(res.data);
-        });
-    }, []);
+  useEffect(() => {
+    axios("https://hp-api.onrender.com/api/characters")
+      .then((res) => setCharacters(res.data))
+      .catch((err) => console.error(err));
+  }, []);
 
-    // Filtro por busqueda y casa
+  useEffect(() => {
+    localStorage.setItem("favorites", JSON.stringify(favorites));
+  }, [favorites]);
 
-    useEffect(() => {
-        const results = characters.filter(char =>
-            char.name.toLowerCase().includes(search.toLowerCase()) &&
-            (houseFilter === '' || char.house === houseFilter) // Filtrar por casa
-        );
-        SetFiltered(results);
-    }, [search, houseFilter, characters]);
+  const toggleFavorite = (character) => {
+    const isFav = favorites.some((fav) => fav.name === character.name);
+    if (isFav) {
+      setFavorites(favorites.filter((fav) => fav.name !== character.name));
+    } else {
+      setFavorites([...favorites, character]);
+    }
+  };
 
-    return (
-    <div className="p-4">
-        <h1 className="text-4xl md:text-4xl text-white font-harry text-center my-4 drop-shadow-lg">
-            🧙‍♂️ Personajes
-        </h1>
+  const houses = ["Gryffindor", "Slytherin", "Hufflepuff", "Ravenclaw"];
 
-      {/* Buscador */}
+  const filteredCharacters = characters
+    .filter((char) =>
+      char.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .filter((char) => (houseFilter ? char.house === houseFilter : true));
+
+  return (
+    <div className="p-4 min-h-screen">
+      <h1 className="text-3xl font-bold text-center text-[#ffffff] mb-6">
+        🧙‍♂️ Personajes
+      </h1>
+
       <input
         type="text"
         placeholder="Buscar personaje..."
-        className="border p-2 w-full mb-3 rounded"
-        value={search}
-        onChange={e => setSearch(e.target.value)}
+        className="w-full p-2 mb-4 border rounded-md"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
       />
 
-      {/* Filtro por casa */}
       <select
-        className="border p-2 w-full mb-4 rounded"
+        className="w-full p-2 mb-6 border rounded-md"
         value={houseFilter}
-        onChange={e => setHouseFilter(e.target.value)}
+        onChange={(e) => setHouseFilter(e.target.value)}
       >
         <option value="">Todas las casas</option>
-        <option value="Gryffindor">Gryffindor</option>
-        <option value="Slytherin">Slytherin</option>
-        <option value="Hufflepuff">Hufflepuff</option>
-        <option value="Ravenclaw">Ravenclaw</option>
+        {houses.map((house) => (
+          <option key={house} value={house}>
+            {house}
+          </option>
+        ))}
       </select>
 
-      {/* Lista de personajes */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-      {filtered.map((char, i) => (
-        <div
-            key={i}
-            className="bg-[url('https://static4.depositphotos.com/1000401/289/v/450/depositphotos_2897034-stock-illustration-old-paper-or-parchment.jpg')] bg-cover bg-center bg-no-repeat text-gray-800 border-[3px] border-yellow-900 rounded-xl shadow-lg p-4 hover:scale-[1.01] transition-all"
-        >
-        <div className="flex items-center justify-center rounded-md h-48 mb-3 overflow-hidden">
-            <img
-                src={char.image || 'https://via.placeholder.com/150'}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {filteredCharacters.map((char) => (
+          <div
+            key={char.name}
+            className="flex flex-col md:flex-row w-full md:max-w-2x bg-[url('https://static4.depositphotos.com/1000401/289/v/450/depositphotos_2897034-stock-illustration-old-paper-or-parchment.jpg')] bg-cover bg-center bg-no-repeat text-gray-800 border-[3px] border-yellow-900 rounded-xl shadow-lg p-4 hover:scale-[1.01] transition-all"
+          >
+            {char.image && (
+              <img
+                src={char.image}
                 alt={char.name}
-                className="max-h-full object-contain"
-            />
-        </div>
-          <h2 className="font-bold text-xl text-yellow-900 font-harry mb-1">{char.name}</h2>
-          <p className="text-sm text-gray-600 mb-1">{char.house || 'Sin casa'}</p>
-    
-          <div className="text-sm text-gray-700 mt-2 space-y-1">
-            {char.dateOfBirth && <p><strong>Nacimiento:</strong> {char.dateOfBirth}</p>}
-            {char.patronus && <p><strong>Patronus:</strong> {char.patronus}</p>}
-            {char.ancestry && <p><strong>Linaje:</strong> {char.ancestry}</p>}
-            {char.actor && <p><strong>Actor:</strong> {char.actor}</p>}
-            {char.wand?.wood && (
-              <p><strong>Varita:</strong> {char.wand.wood} / {char.wand.core} / {char.wand.length}″</p>
+                className="w-full h-48 object-contain rounded-md mb-2 shadow-md"
+                />
             )}
-            <p><strong>Estado:</strong> {char.alive ? 'Vivo' : 'Fallecido'}</p>
+            <div className="p-4">
+              <h2 className="text-xl font-bold text-[#740001]">{char.name}</h2>
+              <p className="text-sm text-gray-700">{char.house || "Sin casa"}</p>
+              <p className="text-xs text-gray-600 mt-1">
+                {char.actor && `Interpretado por: ${char.actor}`}
+                {char.dateOfBirth && <p><strong>Nacimiento:</strong> {char.dateOfBirth}</p>}
+              </p>
+            </div>
+            <button
+              onClick={() => toggleFavorite(char)}
+              className="absolute top-3 right-3 text-red-500 text-2xl hover:text-red-700 transition-colors"
+            >
+              {favorites.some((fav) => fav.name === char.name) ? (
+                <FaHeart />
+              ) : (
+                <FaRegHeart />
+              )}
+            </button>
           </div>
-        
-          <button className="mt-3 text-yellow-500 text-xl hover:text-yellow-600">
-            ⭐
-          </button>
-        </div>
-      ))}
-    </div>
-
+        ))}
+      </div>
     </div>
   );
-}
-
-// Este componente muestra una lista de personajes de Harry Potter, permite buscar por nombre y filtrar por casa.
-// Se utiliza la API de Harry Potter para obtener los datos de los personajes.
-// Se utiliza el hook useEffect para hacer la llamada a la API y almacenar los datos en el estado.
-// Se utiliza el hook useState para manejar el estado de los personajes, la búsqueda y el filtro por casa.
-// Se utiliza axios para hacer la llamada a la API y obtener los datos de los personajes.
+};
 
 export default Characters;

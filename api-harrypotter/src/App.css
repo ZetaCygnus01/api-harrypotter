@@ -40,3 +40,9 @@
 .read-the-docs {
   color: #888;
 }
+
+body {
+  background: url('https://images6.alphacoders.com/130/1305167.jpg') no-repeat center center fixed;
+  background-size: cover;
+  font-family: 'Cormorant Garamond', serif;
+}
