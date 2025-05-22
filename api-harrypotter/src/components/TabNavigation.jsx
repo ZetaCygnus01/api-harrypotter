@@ -13,7 +13,11 @@ const TabNavigation = () => {
         <GiHouse className="text-xl" />
         <span className="text-sm">Casas</span>
       </NavLink>
-      <NavLink to="/movies" className="flex flex-col items-center">
+      <NavLink
+        to="/movies"
+        title="Películas"
+        className={({ isActive }) => `flex flex-col items-center ${isActive ? 'text-yellow-400' : 'text-white'}`}
+      >
         <FaFilm className="text-xl" />
         <span className="text-sm">Películas</span>
       </NavLink>
@@ -28,6 +32,13 @@ const TabNavigation = () => {
       <NavLink to="/info" className="flex flex-col items-center">
         <FaInfoCircle className="text-xl" />
         <span className="text-sm">Info</span>
+      </NavLink>
+      <NavLink
+        to="/"
+        className={({ isActive }) => `flex flex-col items-center ${isActive ? 'text-yellow-400' : 'text-white'}`}
+        >
+        <FaHatWizard className="text-xl" />
+        <span className="text-sm">Personajes</span>
       </NavLink>
     </div>
   );

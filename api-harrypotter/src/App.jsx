@@ -6,6 +6,8 @@ import Books from "./pages/Books";
 import Favorites from "./pages/Favorites";
 import Info from "./pages/Info";
 import TabNavigation from "./components/TabNavigation";
+import GuessCharacter from './pages/GuessCharacter';
+import GuessCharacterPage from './pages/GuessCharacterPage';
 
 function App() {
   return (
@@ -18,6 +20,7 @@ function App() {
           <Route path="/books" element={<Books />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/info" element={<Info />} />
+          <Route path="/guess-character" element={<GuessCharacterPage />} />
         </Routes>
       </div>
       <TabNavigation />
