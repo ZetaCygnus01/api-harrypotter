@@ -1,8 +1,10 @@
 // src/components/GuessCharacter.jsx
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import axios from 'axios';
+import { Card, CardContent } from '../components/ui/card';
+import { Button } from '../components/ui/button';
+
+
 
 const API_URL = 'https://hp-api.onrender.com/api/characters';
 
@@ -51,11 +53,17 @@ const GuessCharacter = () => {
       <CardContent>
         {!showResult ? (
           <>
-        <img
-            src={currentQuestion.correct.image || 'URL_ALTERNATIVA'}
-            alt="personaje"
-            className="w-40 h-40 object-cover rounded-full mx-auto mb-4"
-        />
+            {currentQuestion.correct.image ? (
+              <img
+                src={currentQuestion.correct.image}
+                alt={currentQuestion.correct.name}
+                className="w-40 h-40 object-cover rounded-full mx-auto mb-4"
+              />
+            ) : (
+              <div className="w-40 h-40 rounded-full mx-auto mb-4 bg-gray-700 flex items-center justify-center text-white text-center text-sm p-2">
+              Imagen no disponible
+              </div>
+            )}
             <h2 className="text-xl font-bold mb-4">¿Quién es este personaje?</h2>
             <ul className="mb-4 space-y-1">
               <li><strong>Casa:</strong> {currentQuestion.correct.house || "Desconocida"}</li>
@@ -73,6 +81,13 @@ const GuessCharacter = () => {
                     {opt.name}
                 </Button>
               ))}
+              {/* 🔄 Nuevo botón para saltar personaje */}
+              <Button
+                className="w-full bg-gray-600 hover:bg-gray-700"
+                onClick={() => generateQuestion(characters)}
+                >
+                🔄 Saltar personaje
+              </Button>
             </div>
           </>
         ) : (

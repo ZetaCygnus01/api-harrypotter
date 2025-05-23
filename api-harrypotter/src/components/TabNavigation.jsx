@@ -34,11 +34,11 @@ const TabNavigation = () => {
         <span className="text-sm">Info</span>
       </NavLink>
       <NavLink
-        to="/"
+        to="/adivina"
         className={({ isActive }) => `flex flex-col items-center ${isActive ? 'text-yellow-400' : 'text-white'}`}
         >
         <FaHatWizard className="text-xl" />
-        <span className="text-sm">Personajes</span>
+        <span className="text-sm">Adivina el Personaje</span>
       </NavLink>
     </div>
   );

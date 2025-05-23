@@ -20,7 +20,7 @@ function App() {
           <Route path="/books" element={<Books />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/info" element={<Info />} />
-          <Route path="/guess-character" element={<GuessCharacterPage />} />
+          <Route path="/adivina" element={<GuessCharacterPage />} />
         </Routes>
       </div>
       <TabNavigation />
